@@ -1,0 +1,6 @@
+theme: jekyll-theme-midnight
+title: Atlas Slack
+description: Gradle plugin to send slack messages
+show_downloads: true
+plugins:
+  - jekyll-sitemap
