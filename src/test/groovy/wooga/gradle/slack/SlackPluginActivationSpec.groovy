@@ -19,7 +19,7 @@ package wooga.gradle.slack
 
 import nebula.test.PluginProjectSpec
 
-class GithubPluginActivationSpec extends PluginProjectSpec {
+class SlackPluginActivationSpec extends PluginProjectSpec {
     @Override
     String getPluginName() { 'net.wooga.slack' }
 }

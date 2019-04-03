@@ -18,8 +18,44 @@
 package wooga.gradle.slack
 
 import nebula.test.ProjectSpec
+import spock.lang.Unroll
+import wooga.gradle.slack.internal.DefaultSlackPluginExtension
+import wooga.gradle.slack.tasks.Slack
 
 class SlackPluginSpec extends ProjectSpec {
 
     public static final String PLUGIN_NAME = 'net.wooga.slack'
+
+    @Unroll("creates the task #taskName")
+    def 'Creates needed tasks'(String taskName, Class taskType) {
+        given:
+        assert !project.plugins.hasPlugin(PLUGIN_NAME)
+        assert !project.tasks.findByName(taskName)
+
+        when:
+        project.plugins.apply(PLUGIN_NAME)
+
+        then:
+        def task = project.tasks.findByName(taskName)
+        taskType.isInstance(task)
+
+        where:
+        taskName      | taskType
+        "sendMessage" | Slack
+    }
+
+
+    def 'Creates the [slack] extension'() {
+        given:
+        assert !project.plugins.hasPlugin(PLUGIN_NAME)
+        assert !project.extensions.findByName(SlackPlugin.EXTENSION_NAME)
+
+        when:
+        project.plugins.apply(PLUGIN_NAME)
+
+        then:
+        def extension = project.extensions.findByName(SlackPlugin.EXTENSION_NAME)
+        extension instanceof DefaultSlackPluginExtension
+    }
+
 }

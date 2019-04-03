@@ -41,10 +41,15 @@ github {
 }
 
 dependencies {
+    testCompile "com.github.tomakehurst:wiremock-jre8:2.22.0"
+
     testCompile('org.spockframework:spock-core:1.2-groovy-2.4') {
         exclude module: 'groovy-all'
     }
+
     testCompile('com.nagternal:spock-genesis:0.6.0') {
         exclude group: "org.codehaus.groovy", module: "groovy-all"
     }
+
+    testCompile 'com.github.stefanbirkner:system-rules:1.18.0'
 }

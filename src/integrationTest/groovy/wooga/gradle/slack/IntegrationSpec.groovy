@@ -19,6 +19,7 @@ package wooga.gradle.slack
 
 import org.junit.Rule
 import nebula.test.functional.ExecutionResult
+import org.junit.contrib.java.lang.system.EnvironmentVariables
 import org.junit.contrib.java.lang.system.ProvideSystemProperty
 
 class IntegrationSpec extends nebula.test.IntegrationSpec {
@@ -26,12 +27,21 @@ class IntegrationSpec extends nebula.test.IntegrationSpec {
     @Rule
     ProvideSystemProperty properties = new ProvideSystemProperty("ignoreDeprecations", "true")
 
+    @Rule
+    public final EnvironmentVariables environmentVariables = new EnvironmentVariables()
+
     def setup() {
         def gradleVersion = System.getenv("GRADLE_VERSION")
         if (gradleVersion) {
             this.gradleVersion = gradleVersion
             fork = true
         }
+
+        environmentVariables.clear(
+            SlackConsts.ICON_ENV_VAR,
+            SlackConsts.USERNAME_ENV_VAR,
+            SlackConsts.WEBHOOK_ENV_VAR,
+        )
     }
 
     Boolean outputContains(ExecutionResult result, String message) {
