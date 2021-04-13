@@ -101,9 +101,9 @@ class SlackIntegrationSpec extends IntegrationSpec {
                 .withHeader("Content-Type", "text/html")
                 .withBody("ok")))
 
-        and: "a confgured value in the extension"
+        and: "a configured value in the extension"
         buildFile << """
-        slack.${property} = "${value}"
+        slack.${property}.set(new URL("${value}"))
         """.stripIndent()
 
         when:

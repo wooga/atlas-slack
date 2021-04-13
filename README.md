@@ -15,7 +15,7 @@ This plugin provides tasks and conventions to send slack messages.
 **build.gradle**
 ```groovy
 plugins {
-    id 'net.wooga.slack' version '0.1.0'
+    id 'net.wooga.slack' version '1.0.0'
 }
 ```
 
@@ -27,20 +27,28 @@ Documentation
 Gradle and Java Compatibility
 =============================
 
-| Gradle Version | Works       |
-| :------------- | :---------: |
-| < 4.0          | ![no]       |
-| 4.0            | ![yes]      |
-| 4.1            | ![yes]      |
-| 4.2            | ![yes]      |
-| 4.3            | ![yes]      |
-| 4.4            | ![yes]      |
-| 4.5            | ![yes]      |
-| 4.6            | ![yes]      |
-| 4.7            | ![yes]      |
-| 4.8            | ![yes]      |
-| 4.9            | ![yes]      |
-| 4.10           | ![yes]      |
+| Gradle Version  | Works  |
+| :-------------: | :----: |
+| < 5.0           | ![no]  |
+| 5.0             | ![yes] |
+| 5.1             | ![yes] |
+| 5.2             | ![yes] |
+| 5.3             | ![yes] |
+| 5.4             | ![yes] |
+| 5.5             | ![yes] |
+| 5.6             | ![yes] |
+| 5.6             | ![yes] |
+| 6.0             | ![yes] |
+| 6.1             | ![yes] |
+| 6.2             | ![yes] |
+| 6.3             | ![yes] |
+| 6.4             | ![yes] |
+| 6.5             | ![yes] |
+| 6.6             | ![yes] |
+| 6.6             | ![yes] |
+| 6.7             | ![yes] |
+| 6.8             | ![yes] |
+| 7.0             | ![yes] |
 
 Development
 ===========

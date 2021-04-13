@@ -1,7 +1,26 @@
+/*
+ * Copyright 2019-2021 Wooga GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 package wooga.gradle.slack.tasks
 
 import groovy.json.JsonOutput
 import org.gradle.api.DefaultTask
+import org.gradle.api.Transformer
+import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.specs.Spec
@@ -11,61 +30,78 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 import org.gradle.api.tasks.options.OptionValues
+import org.gradle.api.provider.Provider
 
 import java.security.InvalidParameterException
 import java.util.regex.Pattern
 
 class Slack extends DefaultTask {
 
-    @Option(option = "message", description = "The message to send")
-    void setMessage(String version) {
-        message.set(version)
-    }
-
     @Optional
     @Input
-    final Property<String> message
+    private final Property<String> message
+
+    Property<String> getMessage() {
+        message
+    }
+
+    void setMessage(Provider<String> value) {
+        message.set(value)
+    }
+
+    @Option(option = "message", description = "The message to send")
+    void setMessage(String value) {
+        message.set(value)
+    }
+
+    @Input
+    private final Property<URL> webhook
+
+    Property<URL> getWebhook() {
+        webhook
+    }
+
+    void setWebhook(Provider<URL> value) {
+        webhook.set(value)
+    }
 
     @Option(option = "webhook", description = "The webhook url to send the message to")
-    void setWebhook(String url) {
-        setWebhook(new URL(url))
-    }
-
-    void setWebhook(URL url) {
-        webhook.set(url)
-    }
-
-    @Input
-    final Property<URL> webhook
-
-    @Option(option = "username", description = "The username of the sender")
-    void setUsername(String name) {
-        username.set(name)
+    void setWebhook(String value) {
+        webhook.set(new URL(value))
     }
 
     @Optional
     @Input
-    final Property<String> username
+    private final Property<String> username
 
-    @Option(option = "icon", description = "The icon url for the message")
-    void setIcon(String url) {
-        setIcon(new URL(url))
+    Property<String> getUsername() {
+        username
     }
 
-    void setIcon(URL url) {
+    void setUsername(Provider<String> value) {
+        username.set(value)
+    }
+
+    @Option(option = "username", description = "The username of the sender")
+    void setUsername(String value) {
+        username.set(value)
+    }
+
+    @Optional
+    @Input
+    private final Property<URL> icon
+
+    Property<URL> getIcon() {
+        icon
+    }
+
+    void setIcon(Provider<URL> url) {
         icon.set(url)
     }
 
-    @Optional
-    @Input
-    final Property<URL> icon
-
-    @Option(option = "color", description = "A intend color")
-    void setColor(String value) {
-        if (!validateColor(value)) {
-            throw new InvalidParameterException("The provided value for `color` is not a hex string or one of ['good', 'warning', 'danger']")
-        }
-        color.set(value)
+    @Option(option = "icon", description = "The icon url for the message")
+    void setIcon(String value) {
+        icon.set(new URL(value))
     }
 
     @OptionValues('color')
@@ -75,16 +111,40 @@ class Slack extends DefaultTask {
 
     @Optional
     @Input
-    final Property<String> color
+    private final Property<String> color
 
-    @Option(option = "message-payload", description = "A path to a slack message payload json")
-    void setMessagePayload(String path) {
-        messagePayload.set(project.file(path))
+    Property<String> getColor() {
+        color
+    }
+
+    void setColor(Provider<String> value) {
+        color.set(value)
+    }
+
+    @Option(option = "color", description = "A intend color")
+    void setColor(String value) {
+        if (!validateColor(value)) {
+            throw new InvalidParameterException("The provided value for `color` is not a hex string or one of ['good', 'warning', 'danger']")
+        }
+        color.set(value)
     }
 
     @Optional
     @InputFile
-    final RegularFileProperty messagePayload
+    private final RegularFileProperty messagePayload
+
+    RegularFileProperty getMessagePayload() {
+        messagePayload
+    }
+
+    void setMessagePayload(Provider<File> value) {
+        messagePayload.set(project.layout.file(value))
+    }
+
+    @Option(option = "message-payload", description = "A path to a slack message payload json")
+    void setMessagePayload(String value) {
+        messagePayload.set(new File(value))
+    }
 
     Slack() {
         message = project.objects.property(String)
@@ -92,7 +152,7 @@ class Slack extends DefaultTask {
         username = project.objects.property(String)
         icon = project.objects.property(URL)
         color = project.objects.property(String)
-        messagePayload = project.layout.fileProperty()
+        messagePayload = project.objects.fileProperty()
 
         onlyIf(new Spec<Slack>() {
             @Override
@@ -145,7 +205,7 @@ class Slack extends DefaultTask {
         post.getOutputStream().write(json.getBytes("UTF-8"))
         def response = post.getResponseCode()
 
-        if(response != 200) {
+        if (response != 200) {
             logger.warn("failed to send message")
         }
     }
