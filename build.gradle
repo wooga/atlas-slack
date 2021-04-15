@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Wooga GmbH
+ * Copyright 2019-2021 Wooga GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
  */
 
 plugins {
-    id 'net.wooga.plugins' version '1.4.0'
+    id 'net.wooga.plugins' version '2.0.0'
 }
 
 group 'net.wooga.gradle'
@@ -28,7 +28,7 @@ pluginBundle {
     tags = ['slack', 'messages']
 
     plugins {
-        unity {
+        slack {
             id = 'net.wooga.slack'
             displayName = 'Gradle Slack plugin'
             description = 'This plugin provides tasks and conventions to send slack messages'
@@ -41,15 +41,9 @@ github {
 }
 
 dependencies {
-    testCompile "com.github.tomakehurst:wiremock-jre8:2.22.0"
+    testImplementation "com.github.tomakehurst:wiremock-jre8:2.22.0"
 
-    testCompile('org.spockframework:spock-core:1.2-groovy-2.4') {
-        exclude module: 'groovy-all'
-    }
-
-    testCompile('com.nagternal:spock-genesis:0.6.0') {
+    testImplementation('com.nagternal:spock-genesis:0.6.0') {
         exclude group: "org.codehaus.groovy", module: "groovy-all"
     }
-
-    testCompile 'com.github.stefanbirkner:system-rules:1.18.0'
 }
