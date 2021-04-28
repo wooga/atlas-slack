@@ -18,6 +18,8 @@
 package wooga.gradle.slack
 
 import nebula.test.ProjectSpec
+import org.gradle.api.Project
+import org.gradle.api.UnknownTaskException
 import spock.lang.Unroll
 import wooga.gradle.slack.internal.DefaultSlackPluginExtension
 import wooga.gradle.slack.tasks.Slack
@@ -30,7 +32,7 @@ class SlackPluginSpec extends ProjectSpec {
     def 'Creates needed tasks'(String taskName, Class taskType) {
         given:
         assert !project.plugins.hasPlugin(PLUGIN_NAME)
-        assert !project.tasks.findByName(taskName)
+        assert !hasTask(project, taskName)
 
         when:
         project.plugins.apply(PLUGIN_NAME)
@@ -56,6 +58,15 @@ class SlackPluginSpec extends ProjectSpec {
         then:
         def extension = project.extensions.findByName(SlackPlugin.EXTENSION_NAME)
         extension instanceof DefaultSlackPluginExtension
+    }
+
+    def hasTask(Project project, String taskName) {
+        try {
+            project.tasks.named(taskName)
+            return true
+        } catch(UnknownTaskException _) {
+            return false;
+        }
     }
 
 }
