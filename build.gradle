@@ -41,7 +41,7 @@ github {
 }
 
 dependencies {
-    testImplementation "com.github.tomakehurst:wiremock-jre8:2.22.0"
+    testImplementation "com.github.tomakehurst:wiremock-jre8:2.30.0"
 
     testImplementation('com.nagternal:spock-genesis:0.6.0') {
         exclude group: "org.codehaus.groovy", module: "groovy-all"
