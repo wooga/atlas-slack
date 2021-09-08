@@ -17,17 +17,12 @@
 
 package wooga.gradle.slack
 
-import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.logging.Logging
-import org.slf4j.Logger
 import wooga.gradle.slack.internal.DefaultSlackPluginExtension
 import wooga.gradle.slack.tasks.Slack
 
 class SlackPlugin implements Plugin<Project> {
-
-    static Logger logger = Logging.getLogger(SlackPlugin)
 
     static String EXTENSION_NAME = "slack"
 
@@ -35,19 +30,16 @@ class SlackPlugin implements Plugin<Project> {
     void apply(Project project) {
         def extension = create_and_configure_extension(project)
 
-        def sendMessageTask = project.tasks.create("sendMessage", Slack)
-        sendMessageTask.group = "slack"
-        sendMessageTask.description = "sends a slack message"
+        project.tasks.register("sendMessage", Slack) {t ->
+            t.group = "slack"
+            t.description = "sends a slack message"
+        }
 
-
-        project.tasks.withType(Slack, new Action<Slack>() {
-            @Override
-            void execute(Slack slack) {
-                slack.webhook.set(extension.webhook)
-                slack.username.set(extension.username)
-                slack.icon.set(extension.icon)
-            }
-        })
+        project.tasks.withType(Slack).configureEach{ slack ->
+            slack.webhook.set(extension.webhook)
+            slack.username.set(extension.username)
+            slack.icon.set(extension.icon)
+        }
     }
 
     protected static SlackPluginExtension create_and_configure_extension(Project project) {
