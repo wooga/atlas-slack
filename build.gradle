@@ -16,7 +16,10 @@
  */
 
 plugins {
-    id 'net.wooga.plugins' version '2.2.3'
+    id 'net.wooga.plugins' version '2.3.0'
+    id 'net.wooga.snyk' version '0.10.0'
+    id "net.wooga.snyk-gradle-plugin" version "0.2.0"
+    id "net.wooga.cve-dependency-resolution" version "0.4.0"
 }
 
 group 'net.wooga.gradle'
@@ -40,10 +43,17 @@ github {
     repositoryName = "wooga/atlas-slack"
 }
 
+cveHandler {
+    configurations("compileClasspath", "runtimeClasspath", "testCompileClasspath", "testRuntimeClasspath", "integrationTestCompileClasspath", "integrationTestRuntimeClasspath")
+}
+
 dependencies {
-    testImplementation "com.github.tomakehurst:wiremock-jre8:2.22.0"
+    testImplementation "com.github.tomakehurst:wiremock-jre8:2.33.1"
 
     testImplementation('com.nagternal:spock-genesis:0.6.0') {
+        // This library tries to pull groovy-all in version 2.4 which is not compatible with groovy-all 2.5
+        // There is no newer version of this library. We should either fork it or get rid of the 
+        // property tests alltogether.
         exclude group: "org.codehaus.groovy", module: "groovy-all"
     }
 }
