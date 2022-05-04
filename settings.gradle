@@ -29,4 +29,4 @@ pluginManagement {
   }
 }
 
-rootProject.name = 'atlas-slack'
+rootProject.name = 'slack'

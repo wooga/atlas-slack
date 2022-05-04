@@ -16,7 +16,7 @@
  */
 
 plugins {
-    id 'net.wooga.plugins' version '2.3.0'
+    id 'net.wooga.plugins' version '3.2.0'
     id 'net.wooga.snyk' version '0.10.0'
     id "net.wooga.snyk-gradle-plugin" version "0.2.0"
     id "net.wooga.cve-dependency-resolution" version "0.4.0"
@@ -29,12 +29,15 @@ pluginBundle {
     website = 'https://wooga.github.io/atlas-slack/'
     vcsUrl = 'https://github.com/wooga/atlas-slack'
     tags = ['slack', 'messages']
+}
 
+gradlePlugin {
     plugins {
         slack {
             id = 'net.wooga.slack'
             displayName = 'Gradle Slack plugin'
             description = 'This plugin provides tasks and conventions to send slack messages'
+            implementationClass = 'wooga.gradle.slack.SlackPlugin'
         }
     }
 }
