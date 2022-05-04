@@ -105,7 +105,7 @@ class Slack extends DefaultTask {
     }
 
     @OptionValues('color')
-    List<String> availableColorOptions() {
+    List<String> getAvailableColorOptions() {
         ["hex color", "good", "warning", "danger"]
     }
 
