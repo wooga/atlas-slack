@@ -51,7 +51,7 @@ cveHandler {
 }
 
 dependencies {
-    testImplementation "com.github.tomakehurst:wiremock-jre8:2.33.1"
+    testImplementation "com.github.tomakehurst:wiremock-jre8:3.0.1"
 
     testImplementation('com.nagternal:spock-genesis:0.6.0') {
         // This library tries to pull groovy-all in version 2.4 which is not compatible with groovy-all 2.5
